@@ -58,7 +58,7 @@ def generate_caption(
         caption_max_length,
         caption_min_length,
         top_p,
-        repitition_penalty,
+        # repitition_penalty,
     ):
     model_name = "coco"
     model_check(model_name)
@@ -70,7 +70,7 @@ def generate_caption(
         max_length=caption_max_length,
         min_length=caption_min_length,
         top_p=top_p,
-        repetition_penalty=repitition_penalty,
+        # repetition_penalty=repitition_penalty,
     )
     caption = captions[0]
     print(caption)
@@ -92,7 +92,7 @@ def batch_captioning(
     caption_max_length, 
     caption_min_length, 
     top_p, 
-    repitition_penalty, 
+    # repitition_penalty, 
 ):
     print("Batch captioning started")
     try:
@@ -126,7 +126,7 @@ def batch_captioning(
                 caption_max_length=caption_max_length,
                 caption_min_length=caption_min_length,
                 top_p=top_p,
-                repitition_penalty=repitition_penalty,
+                # repitition_penalty=repitition_penalty,
             )
 
             # without ext
@@ -216,14 +216,14 @@ def on_ui_tabs():
                                 value=0.9,
                                 interactive=True,
                             )
-                            single_repetition_penalty_slider = gr.Slider(
-                                label="Repetition penalty (1.0 = no penalty)",
-                                minimum=0.0,
-                                maximum=1.0,
-                                step=0.01,
-                                value=1.0,
-                                interactive=True,
-                            )
+                            # single_repetition_penalty_slider = gr.Slider(
+                            #     label="Repetition penalty (1.0 = no penalty)",
+                            #     minimum=0.0,
+                            #     maximum=1.0,
+                            #     step=0.01,
+                            #     value=1.0,
+                            #     interactive=True,
+                            # )
 
                             single_start_btn = gr.Button(
                                 value="Interrogate", variant="primary"
@@ -317,14 +317,14 @@ def on_ui_tabs():
                                 value=0.9,
                                 interactive=True,
                             )
-                            batch_repetition_penalty_slider = gr.Slider(
-                                label="Repetition penalty (1.0 = no penalty)",
-                                minimum=0.0,
-                                maximum=1.0,
-                                step=0.01,
-                                value=1.0,
-                                interactive=True,
-                            )
+                            # batch_repetition_penalty_slider = gr.Slider(
+                            #     label="Repetition penalty (1.0 = no penalty)",
+                            #     minimum=0.0,
+                            #     maximum=1.0,
+                            #     step=0.01,
+                            #     value=1.0,
+                            #     interactive=True,
+                            # )
 
                             gr.Markdown("")
 
@@ -349,7 +349,7 @@ def on_ui_tabs():
                 single_caption_max_length_slider, 
                 single_caption_min_length_slider, 
                 single_top_p_slider, 
-                single_repetition_penalty_slider
+                # single_repetition_penalty_slider
             ],
             outputs=single_caption_result,
         )
@@ -363,7 +363,7 @@ def on_ui_tabs():
                 single_caption_max_length_slider, 
                 single_caption_min_length_slider, 
                 single_top_p_slider, 
-                single_repetition_penalty_slider
+                # single_repetition_penalty_slider
             ],
             outputs=single_caption_result,
         )
@@ -385,7 +385,7 @@ def on_ui_tabs():
                 batch_caption_max_length_slider,
                 batch_caption_min_length_slider,
                 batch_top_p_slider,
-                batch_repetition_penalty_slider,
+                # batch_repetition_penalty_slider,
             ],
             outputs=[status_block],
         )
