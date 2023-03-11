@@ -60,6 +60,8 @@ def generate_caption(
         top_p,
         # repitition_penalty,
     ):
+    if image is None:
+        return ""
     model_name = "coco"
     model_check(model_name)
     print(f"Generating captions...")
