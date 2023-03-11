@@ -18,7 +18,7 @@ BLIP2 captioning tool as an extension of AUTOMATIC's WebUI.
 | Name               | Values               | Default   | Description                                                                                    |
 | ------------------ | -------------------- | --------- | ---------------------------------------------------------------------------------------------- |
 | Sampling method    | `Nucleus` or `Top-K` | `Nucleus` | I don't know the difference. sorry.                                                            |
-| Number of beams    | ≧ 0                  | `3`       | Number of beams for beam search. 1 means no beam search.                                       |
+| Number of beams    | ≧ 0                  | 3         | Number of beams for beam search. 1 means no beam search.                                       |
 | Caption min length | ≧ 0                  | 10        | The minimum length of the caption to be generated. If very large, caption accuracy may degrade |
 | Caption max length | ≧ Caption min length | 30        | The minimum length of the caption to be generated.                                             |
 | Top P              | ≧ 0.0                | 0.9       | The cumulative probability for nucleus sampling.                                               |
