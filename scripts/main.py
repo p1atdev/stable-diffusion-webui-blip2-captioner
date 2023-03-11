@@ -52,7 +52,7 @@ def unload_models(log: bool = True):
 
 def generate_caption(
         image: Image, 
-        model_name, 
+        # model_name, 
         sampling_type,
         num_beams,  
         caption_max_length,
@@ -60,6 +60,7 @@ def generate_caption(
         top_p,
         repitition_penalty,
     ):
+    model_name = "coco"
     model_check(model_name)
     print(f"Generating captions...")
     captions = captioners[model_name].generate_caption(
@@ -85,7 +86,7 @@ def batch_captioning(
     input_dir, 
     output_dir,
     caption_ext, 
-    model_name,
+    # model_name,
     sampling_type, 
     num_beams, 
     caption_max_length, 
@@ -119,7 +120,7 @@ def batch_captioning(
 
             caption = generate_caption(
                 img, 
-                model_name,
+                # model_name,
                 sampling_type=(sampling_type == "Nucleus"),
                 num_beams=num_beams,
                 caption_max_length=caption_max_length,
@@ -166,12 +167,12 @@ def on_ui_tabs():
                                 type="pil",
                             )
 
-                            single_model_select = gr.Dropdown(
-                                label="Model",
-                                choices=model_list,
-                                value=model_list[0],
-                                interactive=True,
-                            )
+                            # single_model_select = gr.Dropdown(
+                            #     label="Model",
+                            #     choices=model_list,
+                            #     value=model_list[0],
+                            #     interactive=True,
+                            # )
 
                             single_sampling_method_radio = gr.Radio(
                                 label="Sampling method",
@@ -266,12 +267,12 @@ def on_ui_tabs():
 
                             gr.Markdown("")
 
-                            batch_model_select = gr.Dropdown(
-                                label="Model",
-                                choices=model_list,
-                                value=model_list[0],
-                                interactive=True,
-                            )
+                            # batch_model_select = gr.Dropdown(
+                            #     label="Model",
+                            #     choices=model_list,
+                            #     value=model_list[0],
+                            #     interactive=True,
+                            # )
 
                             batch_sampling_method_radio = gr.Radio(
                                 label="Sampling method",
@@ -342,7 +343,7 @@ def on_ui_tabs():
             fn=generate_caption,
             inputs=[
                 image, 
-                single_model_select,
+                # single_model_select,
                 single_sampling_method_radio, 
                 single_number_of_beams_slider, 
                 single_caption_max_length_slider, 
@@ -356,7 +357,7 @@ def on_ui_tabs():
             fn=generate_caption,
             inputs=[
                 image, 
-                single_model_select,
+                # single_model_select,
                 single_sampling_method_radio, 
                 single_number_of_beams_slider, 
                 single_caption_max_length_slider, 
@@ -378,7 +379,7 @@ def on_ui_tabs():
                 input_dir_input,
                 output_dir_input,
                 output_caption_ext,
-                batch_model_select,
+                # batch_model_select,
                 batch_sampling_method_radio,
                 batch_number_of_beams_slider,
                 batch_caption_max_length_slider,
