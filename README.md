@@ -29,3 +29,8 @@ This software includes the following third-party libraries:
 - [salesforce-lavis](https://github.com/salesforce/LAVIS/tree/main/projects/blip2) (BSD-3-Clause License)
 
 
+# Related extensions
+
+- [Tps-F/sd-webui-blip2](https://github.com/Tps-F/sd-webui-blip2)
+- [toriato/stable-diffusion-webui-wd14-tagger](https://github.com/toriato/stable-diffusion-webui-wd14-tagger)
+
