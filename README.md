@@ -15,14 +15,14 @@ BLIP2 captioning tool as an extension of AUTOMATIC's WebUI.
 
 # Parameters
 
-| Name               | Values                 | Default   | Description                                                                                    |
-| ------------------ | ---------------------- | --------- | ---------------------------------------------------------------------------------------------- |
-| Sampling method    | `Nucleus` or `Top-K`   | `Nucleus` | I don't know the difference. sorry.                                                            |
-| Number of beams    | ≧ 0                    | `3`       | Number of beams for beam search. 1 means no beam search.                                       |
-| Caption min length | ≧ 0                    | 10        | The minimum length of the caption to be generated. If very large, caption accuracy may degrade |
-| Caption max length | ≧ Caption min length   | 30        | The minimum length of the caption to be generated.                                             |
-| Top P              | ≧ 0.0                  | 0.9       | The cumulative probability for nucleus sampling.                                               |
-| <!--               | ~~Repetition penalty~~ | 0.0~1.0   | 1.0                                                                                            | The parameter for repetition penalty. 1.0 means no penalty. | --> |
+| Name               | Values               | Default   | Description                                                                                    |
+| ------------------ | -------------------- | --------- | ---------------------------------------------------------------------------------------------- |
+| Sampling method    | `Nucleus` or `Top-K` | `Nucleus` | I don't know the difference. sorry.                                                            |
+| Number of beams    | ≧ 0                  | `3`       | Number of beams for beam search. 1 means no beam search.                                       |
+| Caption min length | ≧ 0                  | 10        | The minimum length of the caption to be generated. If very large, caption accuracy may degrade |
+| Caption max length | ≧ Caption min length | 30        | The minimum length of the caption to be generated.                                             |
+| Top P              | ≧ 0.0                | 0.9       | The cumulative probability for nucleus sampling.                                               |
+
 
 # License
 This software includes the following third-party libraries:
