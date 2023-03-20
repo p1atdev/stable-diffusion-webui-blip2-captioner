@@ -17,7 +17,8 @@ import launch
 from blip2 import BLIP2
 
 script_dir = Path(scripts.basedir())
-captioners = {}  
+captioners = {} 
+# model_loading_status = 0 # 1 to loading, 2 to loaded
 
 model_list = [
     "coco",
@@ -27,16 +28,21 @@ model_list = [
 sampling_methods = ["Nucleus", "Top-K"]
 
 def model_check(name):
+    # global model_loading_status
+    # if model_loading_status == 1:
+    #     raise Exception("Model is loading")
     if name not in captioners:
         # library_check()
         if name in model_list:
             print(f"Loading {name} model...")
+            # model_loading_status = 1
             # unload other models
             unload_models(False)
             captioners[name] = BLIP2(
                 name
             )
             print(f"Model {name} loaded")
+            # model_loading_status = 2
 
 
 def unload_models(log: bool = True):
@@ -46,9 +52,10 @@ def unload_models(log: bool = True):
         captioners[key].unload()
     captioners.clear()
     torch.cuda.empty_cache()
+    # global model_loading_status
+    # model_loading_status = 0
     if log:
         print("Done. Models unloaded")
-
 
 def generate_caption(
         image: Image, 
@@ -63,7 +70,10 @@ def generate_caption(
     if image is None:
         return ""
     model_name = "coco"
-    model_check(model_name)
+    try:
+        model_check(model_name)
+    except:
+        return ""
     print(f"Generating captions...")
     captions = captioners[model_name].generate_caption(
         image, 
@@ -78,7 +88,24 @@ def generate_caption(
     print(caption)
 
     return caption
-    
+
+def generate_caption_for_single_image(
+        image,
+        sampling_type,
+        num_beams,  
+        caption_max_length,
+        caption_min_length,
+        top_p,
+    ):
+    caption = generate_caption(
+        image, 
+        sampling_type,
+        num_beams,  
+        caption_max_length,
+        caption_min_length,
+        top_p,
+    )
+    return caption
 
 def create_caption_file(caption, output_caption_path):
     with open(output_caption_path, "w", encoding="utf-8") as f:
@@ -175,64 +202,8 @@ def on_ui_tabs():
                             #     value=model_list[0],
                             #     interactive=True,
                             # )
-
-                            single_sampling_method_radio = gr.Radio(
-                                label="Sampling method",
-                                choices=sampling_methods,
-                                value=sampling_methods[0],
-                                interactive=True,
-                            )
-
-                            single_number_of_beams_slider = gr.Slider(
-                                label="Number of beams (0 = no beam search)",
-                                minimum=0,
-                                maximum=10,
-                                step=1,
-                                value=3,
-                                interactive=True,
-                            )
-
-                            with gr.Row():
-                                single_caption_min_length_slider = gr.Slider(
-                                    label="Caption min length",
-                                    minimum=0,
-                                    maximum=200,
-                                    step=1,
-                                    value=10,
-                                    interactive=True,
-                                )
-                                single_caption_max_length_slider = gr.Slider(
-                                    label="Caption max length",
-                                    minimum=1,
-                                    maximum=200,
-                                    step=1,
-                                    value=30,
-                                    interactive=True,
-                                )
-
-                            single_top_p_slider = gr.Slider(
-                                label="Top p",
-                                minimum=0.0,
-                                maximum=1.0,
-                                step=0.01,
-                                value=0.9,
-                                interactive=True,
-                            )
-                            # single_repetition_penalty_slider = gr.Slider(
-                            #     label="Repetition penalty (1.0 = no penalty)",
-                            #     minimum=0.0,
-                            #     maximum=1.0,
-                            #     step=0.01,
-                            #     value=1.0,
-                            #     interactive=True,
-                            # )
-
                             single_start_btn = gr.Button(
                                 value="Interrogate", variant="primary"
-                            )
-
-                            single_unload_models_btn = gr.Button(
-                                value="Unload models", variant="secondary"
                             )
 
                         with gr.Column():
@@ -247,7 +218,6 @@ def on_ui_tabs():
                             )
 
                 with gr.TabItem(label="Batch"):
-
                     with gr.Row().style(equal_height=False):
                         with gr.Column():
                             input_dir_input = gr.Textbox(
@@ -269,67 +239,6 @@ def on_ui_tabs():
 
                             gr.Markdown("")
 
-                            # batch_model_select = gr.Dropdown(
-                            #     label="Model",
-                            #     choices=model_list,
-                            #     value=model_list[0],
-                            #     interactive=True,
-                            # )
-
-                            batch_sampling_method_radio = gr.Radio(
-                                label="Sampling method",
-                                choices=sampling_methods,
-                                value=sampling_methods[0],
-                                interactive=True,
-                            )
-
-                            batch_number_of_beams_slider = gr.Slider(
-                                label="Number of beams (0 = no beam search)",
-                                minimum=0,
-                                maximum=10,
-                                step=1,
-                                value=3,
-                                interactive=True,
-                            )
-
-                            with gr.Row():
-                                batch_caption_min_length_slider = gr.Slider(
-                                    label="Caption min length",
-                                    minimum=0,
-                                    maximum=200,
-                                    step=1,
-                                    value=10,
-                                    interactive=True,
-                                )
-                                batch_caption_max_length_slider = gr.Slider(
-                                    label="Caption max length",
-                                    minimum=1,
-                                    maximum=200,
-                                    step=1,
-                                    value=30,
-                                    interactive=True,
-                                )
-                                
-
-                            batch_top_p_slider = gr.Slider(
-                                label="Top p",
-                                minimum=0.0,
-                                maximum=1.0,
-                                step=0.01,
-                                value=0.9,
-                                interactive=True,
-                            )
-                            # batch_repetition_penalty_slider = gr.Slider(
-                            #     label="Repetition penalty (1.0 = no penalty)",
-                            #     minimum=0.0,
-                            #     maximum=1.0,
-                            #     step=0.01,
-                            #     value=1.0,
-                            #     interactive=True,
-                            # )
-
-                            gr.Markdown("")
-
                             batch_start_btn = gr.Button(
                                 value="Interrogate", variant="primary"
                             )
@@ -341,35 +250,96 @@ def on_ui_tabs():
                         with gr.Column():
                             status_block = gr.Label(label="Status", value="Idle")
 
-        image.change(
-            fn=generate_caption,
-            inputs=[
-                image, 
-                # single_model_select,
-                single_sampling_method_radio, 
-                single_number_of_beams_slider, 
-                single_caption_max_length_slider, 
-                single_caption_min_length_slider, 
-                single_top_p_slider, 
-                # single_repetition_penalty_slider
-            ],
-            outputs=single_caption_result,
-        )
+            with gr.Row():
+                    with gr.Column():
+                        sampling_method_radio = gr.Radio(
+                                label="Sampling method",
+                                choices=sampling_methods,
+                                value=sampling_methods[0],
+                                interactive=True,
+                            )
+
+                        number_of_beams_slider = gr.Slider(
+                            label="Number of beams (0 = no beam search)",
+                            minimum=0,
+                            maximum=10,
+                            step=1,
+                            value=3,
+                            interactive=True,
+                        )
+
+                        with gr.Row():
+                            caption_min_length_slider = gr.Slider(
+                                label="Caption min length",
+                                minimum=0,
+                                maximum=200,
+                                step=1,
+                                value=10,
+                                interactive=True,
+                            )
+                            caption_max_length_slider = gr.Slider(
+                                label="Caption max length",
+                                minimum=1,
+                                maximum=200,
+                                step=1,
+                                value=30,
+                                interactive=True,
+                            )
+
+                        top_p_slider = gr.Slider(
+                            label="Top p",
+                            minimum=0.0,
+                            maximum=1.0,
+                            step=0.01,
+                            value=0.9,
+                            interactive=True,
+                        )
+                        # single_repetition_penalty_slider = gr.Slider(
+                        #     label="Repetition penalty (1.0 = no penalty)",
+                        #     minimum=0.0,
+                        #     maximum=1.0,
+                        #     step=0.01,
+                        #     value=1.0,
+                        #     interactive=True,
+                        # )
+
+                        unload_models_btn = gr.Button(
+                            value="Unload models", variant="secondary"
+                        )
+                        
+                    gr.Column()
+
+        # commnet out beacause of loading the model twice...
+        # image.change(
+        #     fn=generate_caption_for_single_image,
+        #     inputs=[
+        #         image, 
+        #         # single_model_select,
+        #         sampling_method_radio, 
+        #         number_of_beams_slider, 
+        #         caption_max_length_slider, 
+        #         caption_min_length_slider, 
+        #         top_p_slider, 
+        #         # single_repetition_penalty_slider
+        #     ],
+        #     outputs=[single_caption_result],
+        # )
+
         single_start_btn.click(
-            fn=generate_caption,
+            fn=generate_caption_for_single_image,
             inputs=[
                 image, 
                 # single_model_select,
-                single_sampling_method_radio, 
-                single_number_of_beams_slider, 
-                single_caption_max_length_slider, 
-                single_caption_min_length_slider, 
-                single_top_p_slider, 
+                sampling_method_radio, 
+                number_of_beams_slider, 
+                caption_max_length_slider, 
+                caption_min_length_slider, 
+                top_p_slider, 
                 # single_repetition_penalty_slider
             ],
-            outputs=single_caption_result,
+            outputs=[single_caption_result],
         )
-        single_unload_models_btn.click(
+        unload_models_btn.click(
             fn=unload_models,
             inputs=[],
             outputs=[],
@@ -382,11 +352,11 @@ def on_ui_tabs():
                 output_dir_input,
                 output_caption_ext,
                 # batch_model_select,
-                batch_sampling_method_radio,
-                batch_number_of_beams_slider,
-                batch_caption_max_length_slider,
-                batch_caption_min_length_slider,
-                batch_top_p_slider,
+                sampling_method_radio,
+                number_of_beams_slider,
+                caption_max_length_slider,
+                caption_min_length_slider,
+                top_p_slider,
                 # batch_repetition_penalty_slider,
             ],
             outputs=[status_block],
