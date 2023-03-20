@@ -1,7 +1,5 @@
 import os
 from pathlib import Path
-from glob import glob
-import shutil
 import torch
 
 import gradio as gr
@@ -9,14 +7,10 @@ from PIL import Image, ImageFile
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
-from webui import wrap_gradio_gpu_call
-from modules import shared, scripts, script_callbacks, ui
-from modules import generation_parameters_copypaste as parameters_copypaste
-import launch
+from modules import script_callbacks
 
 from blip2 import BLIP2
 
-script_dir = Path(scripts.basedir())
 captioners = {} 
 # model_loading_status = 0 # 1 to loading, 2 to loaded
 
