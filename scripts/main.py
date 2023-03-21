@@ -136,6 +136,15 @@ def batch_captioning(
             if f.is_dir():
                 continue
 
+            # without ext
+            filename = f.stem
+
+            caption_output_path = output_dir / f"{filename}.{caption_ext}"
+
+            if caption_output_path.exists():
+                print(f"File already exists: {caption_output_path}. Skipped.")
+                continue
+
             img = Image.open(f)
             # fix png
             if img.mode == "RGBA":
@@ -152,17 +161,8 @@ def batch_captioning(
                 # repitition_penalty=repitition_penalty,
             )
 
-            # without ext
-            filename = f.stem
-
             if caption_ext.startswith("."): # remove dot
                 caption_ext = caption_ext[1:]
-
-            caption_output_path = output_dir / f"{filename}.{caption_ext}"
-
-            if caption_output_path.exists():
-                print(f"File already exists: {caption_output_path}. Skipped.")
-                continue
 
             create_caption_file(caption, caption_output_path)
 
