@@ -31,7 +31,7 @@ def model_check(name):
             print(f"Loading {name} model...")
             # model_loading_status = 1
             # unload other models
-            unload_models(False)
+            # unload_models(False)
             captioners[name] = BLIP2(
                 name
             )
